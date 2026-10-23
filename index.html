@@ -2,10 +2,10 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 <meta name="theme-color" content="#07111d">
 
-<title>GeoScan Explorer | الاستكشاف الجغرافي</title>
+<title>GeoScan Explorer | المختبر الجغرافي</title>
 
 <link rel="stylesheet"
  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
@@ -20,11 +20,10 @@
   --muted: #a5b8c9;
   --green: #40e0a0;
   --orange: #ffbd59;
+  --red: #ff7272;
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
   margin: 0;
@@ -36,7 +35,7 @@ body {
 header {
   padding: 22px 14px;
   text-align: center;
-  background: linear-gradient(135deg, #12314a, #081421);
+  background: linear-gradient(135deg,#12314a,#081421);
   border-bottom: 1px solid var(--cyan);
 }
 
@@ -49,14 +48,14 @@ header h1 {
 header p {
   margin: 0;
   color: var(--muted);
-  font-size: 13px;
   line-height: 1.8;
+  font-size: 13px;
 }
 
 .container {
-  max-width: 1300px;
-  padding: 12px;
+  max-width: 1400px;
   margin: auto;
+  padding: 12px;
 }
 
 .panel {
@@ -65,19 +64,20 @@ header p {
   border-radius: 12px;
   padding: 14px;
   margin-bottom: 12px;
+  min-width: 0;
 }
 
 h2, h3 {
-  font-size: 17px;
-  margin-top: 0;
   color: var(--cyan);
+  margin-top: 0;
+  font-size: 17px;
 }
 
 label {
   display: block;
-  margin: 10px 0 6px;
-  font-size: 13px;
+  margin: 11px 0 6px;
   color: var(--muted);
+  font-size: 13px;
 }
 
 input, select, button {
@@ -88,16 +88,22 @@ input, select, button {
   background: #081725;
   color: var(--text);
   font-size: 14px;
+  min-width: 0;
 }
 
 button {
   cursor: pointer;
-  transition: 0.2s;
+  margin-top: 8px;
 }
 
 button:hover {
   border-color: var(--cyan);
   background: #17344a;
+}
+
+button:disabled {
+  opacity: .55;
+  cursor: wait;
 }
 
 .primary {
@@ -108,32 +114,8 @@ button:hover {
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(2,minmax(0,1fr));
   gap: 8px;
-}
-
-.target-btn {
-  min-height: 65px;
-  line-height: 1.6;
-}
-
-.target-btn.active {
-  border-color: var(--green);
-  background: #123b3b;
-}
-
-#map {
-  height: 55vh;
-  min-height: 350px;
-  border-radius: 10px;
-  overflow: hidden;
-  background: #142536;
-}
-
-.status {
-  line-height: 1.9;
-  font-size: 13px;
-  overflow-wrap: anywhere;
 }
 
 .badge {
@@ -146,38 +128,76 @@ button:hover {
   font-size: 12px;
 }
 
+.status {
+  font-size: 13px;
+  line-height: 1.9;
+  overflow-wrap: anywhere;
+}
+
 .note {
   color: var(--orange);
   font-size: 12px;
   line-height: 1.9;
 }
 
-a {
-  color: var(--cyan);
+.muted { color: var(--muted); }
+
+#map {
+  height: 55vh;
+  min-height: 330px;
+  border-radius: 9px;
+  overflow: hidden;
 }
+
+.workspace { min-width: 0; }
+
+.result {
+  border: 1px solid var(--border);
+  padding: 11px;
+  border-radius: 9px;
+  margin-top: 10px;
+  overflow-wrap: anywhere;
+}
+
+.result img {
+  width: 100%;
+  max-height: 210px;
+  object-fit: contain;
+  background: #081725;
+  border-radius: 6px;
+  margin-top: 8px;
+}
+
+.result h4 {
+  margin: 5px 0;
+  color: var(--green);
+}
+
+.result a {
+  color: var(--cyan);
+  overflow-wrap: anywhere;
+}
+
+a { color: var(--cyan); }
 
 footer {
   text-align: center;
-  padding: 20px;
   color: var(--muted);
+  padding: 20px;
   font-size: 12px;
 }
 
-@media(min-width: 850px) {
+@media(min-width:900px) {
   .workspace {
     display: grid;
-    grid-template-columns: 330px 1fr;
+    grid-template-columns: 330px minmax(0,1fr);
     gap: 12px;
     align-items: start;
   }
 
-  #map {
-    height: 72vh;
-  }
+  #map { height: 65vh; }
 
-  .grid {
-    grid-template-columns: 1fr 1fr;
-  }
+  .grid { grid-template-columns: 1fr 1fr; }
 }
 </style>
 </head>
@@ -186,27 +206,31 @@ footer {
 
 <header>
   <h1>🛰️ GeoScan Explorer</h1>
-  <p>منصة الاستكشاف الجغرافي وتحليل بيانات الأرض</p>
-  <div style="margin-top:10px">
-    <span class="badge">Satellite</span>
-    <span class="badge">Geology</span>
-    <span class="badge">Remote Sensing</span>
+  <p>مختبر الخرائط والاستشعار عن بعد والبيانات الجغرافية</p>
+  <div>
+    <span class="badge">Satellite Data</span>
+    <span class="badge">Sentinel-2</span>
+    <span class="badge">Geospatial Analysis</span>
   </div>
 </header>
 
 <div class="container">
 
   <section class="panel">
-    <h2>🗺️ خريطة الاستكشاف</h2>
+    <h2>🗺️ الخريطة الرئيسية</h2>
 
-    <label for="basemap">نوع الخريطة</label>
-
+    <label for="basemap">طبقة الخريطة</label>
     <select id="basemap">
       <option value="satellite">صور الأقمار الصناعية</option>
       <option value="street">الطرق والشوارع</option>
-      <option value="topo">التضاريس والطبوغرافيا</option>
+      <option value="topo">التضاريس</option>
       <option value="dark">الخريطة الداكنة</option>
     </select>
+
+    <p class="note">
+      صور الخلفية تساعد على استكشاف سطح الأرض، لكنها ليست بحد ذاتها
+      نتائج تحليل جيولوجي.
+    </p>
   </section>
 
   <div class="workspace">
@@ -214,30 +238,64 @@ footer {
     <aside>
 
       <section class="panel">
-        <h3>📍 تحديد منطقة البحث</h3>
+        <h3>📍 منطقة الدراسة</h3>
 
-        <label for="lat">خط العرض Latitude</label>
+        <label for="lat">خط العرض</label>
         <input id="lat" type="number" step="any"
-               value="31.9539" min="-90" max="90">
+               min="-90" max="90" value="31.9539">
 
-        <label for="lon">خط الطول Longitude</label>
+        <label for="lon">خط الطول</label>
         <input id="lon" type="number" step="any"
-               value="35.9106" min="-180" max="180">
+               min="-180" max="180" value="35.9106">
 
-        <label for="radius">نطاق البحث بالكيلومترات</label>
+        <label for="radius">نصف قطر البحث (كم)</label>
         <input id="radius" type="number"
-               value="5" min="0.1" max="500" step="any">
+               min="0.1" max="100" step="any" value="5">
 
         <button class="primary" id="locate">
-          تحديد الموقع على الخريطة
+          تحديد المنطقة على الخريطة
         </button>
 
-        <button id="gps" style="margin-top:8px">
-          📡 استخدام موقعي الحالي
-        </button>
+        <button id="gps">📡 استخدام موقعي الحالي</button>
+
+        <button id="drawMode">✏️ تحديد المركز بالنقر على الخريطة</button>
 
         <p class="note">
-          تحديد موقعك اختياري، ولن يعمل إلا إذا منحت المتصفح إذن الوصول للموقع.
+          يمكن النقر على الخريطة لتحديد مركز الدراسة.
+          يتطلب GPS موافقتك على مشاركة الموقع.
+        </p>
+      </section>
+
+      <section class="panel">
+        <h3>🛰️ البحث عن صور Sentinel-2</h3>
+
+        <label for="dateFrom">من تاريخ</label>
+        <input id="dateFrom" type="date" value="2025-01-01">
+
+        <label for="dateTo">إلى تاريخ</label>
+        <input id="dateTo" type="date">
+
+        <label for="cloud">أقصى نسبة غيوم (%)</label>
+        <input id="cloud" type="number" min="0" max="100" value="20">
+
+        <label for="limit">عدد النتائج المطلوب</label>
+        <select id="limit">
+          <option value="5">5 صور</option>
+          <option value="10" selected>10 صور</option>
+          <option value="20">20 صورة</option>
+          <option value="50">50 صورة</option>
+        </select>
+
+        <button class="primary" id="searchImages">
+          🔎 البحث في بيانات الأقمار
+        </button>
+
+        <button id="clearResults">مسح النتائج</button>
+
+        <p class="note">
+          يستخدم البحث كتالوج Earth Search العام. يعتمد توفر النتائج
+          على المنطقة والتاريخ واتصال الإنترنت. قد لا تتوفر صور مناسبة
+          لكل تاريخ أو مكان.
         </p>
       </section>
 
@@ -245,112 +303,77 @@ footer {
         <h3>🔬 نوع الدراسة</h3>
 
         <div class="grid">
-          <button class="target-btn active" data-target="caves">
-            🕳️<br>الكهوف والفراغات
-          </button>
-
-          <button class="target-btn" data-target="tunnels">
-            🚇<br>الأنفاق
-          </button>
-
-          <button class="target-btn" data-target="water">
-            💧<br>المياه الجوفية
-          </button>
-
-          <button class="target-btn" data-target="minerals">
-            ⛏️<br>المعادن
-          </button>
-
-          <button class="target-btn" data-target="thermal">
-            🌡️<br>الشذوذ الحراري
-          </button>
-
-          <button class="target-btn" data-target="gravity">
-            🌐<br>شذوذ الجاذبية
-          </button>
+          <button data-target="caves">🕳️ الكهوف والفراغات</button>
+          <button data-target="tunnels">🚇 الأنفاق</button>
+          <button data-target="water">💧 المياه الجوفية</button>
+          <button data-target="minerals">⛏️ المعادن</button>
+          <button data-target="thermal">🌡️ الحرارة</button>
+          <button data-target="gravity">🌐 الجاذبية</button>
         </div>
 
-        <div id="targetInfo" class="status"
-             style="margin-top:12px"></div>
+        <div id="targetInfo" class="status" style="margin-top:12px"></div>
       </section>
 
       <section class="panel">
-        <h3>📊 أدوات البيانات</h3>
+        <h3>📊 تصدير البيانات</h3>
 
-        <button id="sources">
-          فتح مصادر البيانات العلمية
-        </button>
+        <button id="exportCSV">تنزيل نتائج البحث CSV</button>
+        <button id="exportJSON">تنزيل بيانات المشاهد JSON</button>
 
-        <button id="export" style="margin-top:8px">
-          تنزيل إحداثيات البحث CSV
-        </button>
-
-        <button id="reset" style="margin-top:8px">
-          إعادة ضبط الخريطة
-        </button>
+        <p class="note">
+          ملفات التصدير تحتوي على معلومات المشاهد التي أعادها مصدر البيانات،
+          ولا تمثل تقرير كشف عن أجسام تحت الأرض.
+        </p>
       </section>
 
     </aside>
 
     <main>
+
       <section class="panel">
         <div id="map"></div>
+        <div id="mapStatus" class="status" style="margin-top:10px"></div>
       </section>
 
       <section class="panel">
-        <h3>📋 معلومات منطقة الدراسة</h3>
-        <div id="status" class="status">
-          جاهز. حدد موقعًا على الخريطة أو أدخل الإحداثيات.
+        <h3>📋 حالة النظام</h3>
+        <div id="status" class="status" aria-live="polite">
+          جاهز. حدد المنطقة ثم ابحث عن مشاهد الأقمار الصناعية.
         </div>
       </section>
 
       <section class="panel">
-        <h3>🧪 مصادر البيانات الفعلية</h3>
-
-        <p>
-          <a href="https://dataspace.copernicus.eu/"
-             target="_blank" rel="noopener">
-            Copernicus Data Space
-          </a>
-          — صور أقمار Sentinel وبيانات الاستشعار عن بعد.
-        </p>
-
-        <p>
-          <a href="https://earthexplorer.usgs.gov/"
-             target="_blank" rel="noopener">
-            USGS EarthExplorer
-          </a>
-          — بيانات Landsat ومجموعات بيانات جغرافية أخرى.
-        </p>
-
-        <p>
-          <a href="https://www.earthdata.nasa.gov/"
-             target="_blank" rel="noopener">
-            NASA Earthdata
-          </a>
-          — بيانات علم الأرض والاستشعار عن بعد.
-        </p>
-
-        <p>
-          <a href="https://earthengine.google.com/"
-             target="_blank" rel="noopener">
-            Google Earth Engine
-          </a>
-          — أدوات تحليل البيانات الجغرافية وصور الأقمار الصناعية.
-        </p>
+        <h3>🖼️ نتائج البحث عن الصور</h3>
+        <div id="results" class="status">
+          لم يبدأ البحث بعد.
+        </div>
       </section>
 
       <section class="panel">
-        <h3>⚠️ حدود الكشف</h3>
+        <h3>🧪 أدوات التحليل المتاحة</h3>
 
-        <p class="note">
-          هذه النسخة تعرض خرائط فعلية وتحدد مواقع البحث،
-          لكنها لا تنفذ بعد تحليلًا آليًا للكهوف أو الأنفاق
-          أو المياه الجوفية أو المعادن. لا توجد نتائج كشف
-          مؤكدة ما لم تُحمّل بيانات مناسبة وتُحلّل علميًا.
-          صور الأقمار الصناعية الحرارية تقيس حرارة السطح،
-          وبيانات Sentinel-2 تساعد على دراسة الخصائص الطيفية
-          للسطح، لكنها لا ترى مباشرةً الأنفاق أو الكهوف المدفونة.
+        <p>
+          <b>Sentinel-2:</b>
+          يوفر بيانات متعددة الأطياف يمكن استخدامها لحساب مؤشرات
+          سطحية عند تحميل النطاقات المناسبة ومعالجتها.
+        </p>
+
+        <p>
+          <b>Landsat:</b>
+          يوفر بيانات متعددة الأطياف وبيانات حرارية ضمن منتجاته
+          المناسبة، لكن هذه النسخة لا تنفذ بعد معالجة حرارية فعلية.
+        </p>
+
+        <p>
+          <b>المياه الجوفية:</b>
+          يمكن تقييم مؤشرات جيولوجية وتضاريسية، لكن لا يمكن تأكيد
+          وجود المياه أو عمقها دون بيانات إضافية مناسبة.
+        </p>
+
+        <p>
+          <b>الكهوف والأنفاق:</b>
+          تحتاج إلى بيانات جيوفيزيائية أو أدلة مستقلة؛ لا يمكن
+          إثبات وجودها بمجرد عرض صور الأقمار الصناعية.
         </p>
       </section>
 
@@ -360,20 +383,32 @@ footer {
 </div>
 
 <footer>
-  GeoScan Explorer — منصة استكشاف جغرافي تعليمية
+  GeoScan Explorer — أداة استكشاف وتحليل جغرافي
 </footer>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
-const map = L.map("map").setView([31.9539, 35.9106], 8);
+"use strict";
+
+/*
+  واجهة Earth Search STAC العامة.
+  يستخدم البحث مجموعة Sentinel-2 L2A.
+  قد تتغير إتاحة الخدمة أو حدود الاستخدام.
+*/
+
+const STAC_URL = "https://earth-search.aws.element84.com/v1/search";
+
+const $ = id => document.getElementById(id);
+
+const map = L.map("map").setView([31.9539, 35.9106], 9);
 
 const layers = {
   satellite: L.tileLayer(
     "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
     {
       maxZoom: 19,
-      attribution: "Imagery © Esri and its data providers"
+      attribution: "Imagery © Esri and data providers"
     }
   ),
 
@@ -405,74 +440,99 @@ const layers = {
 let activeLayer = layers.satellite.addTo(map);
 let marker = null;
 let circle = null;
+let drawMode = false;
+let currentFeatures = [];
 let selectedTarget = "caves";
 
 const targets = {
   caves: {
     name: "الكهوف والفراغات",
-    info: "يتطلب التحقق من الفراغات تحت الأرض بيانات جيوفيزيائية مناسبة، مثل الرادار الأرضي أو المقاومة الكهربائية. لا تكفي الصور الفضائية وحدها.",
-    color: "#ff5151"
+    info: "لا توجد وظيفة كشف آلي للكهوف في هذه النسخة. يلزم تحليل جيوفيزيائي مناسب للتحقق من الفراغات المدفونة."
   },
 
   tunnels: {
     name: "الأنفاق",
-    info: "تحديد الأنفاق المدفونة يحتاج عادةً إلى مسح جيوفيزيائي مناسب. لا يمكن تأكيد وجود نفق من صورة قمر صناعي عادية.",
-    color: "#ff963d"
+    info: "صور الأقمار العادية لا تؤكد وجود الأنفاق. يمكن تطوير عارض لنتائج المسح الجيوفيزيائي عند توفر ملفات القياس."
   },
 
   water: {
     name: "المياه الجوفية",
-    info: "يمكن جمع المعلومات الجيولوجية والتضاريسية والاستشعار عن بعد لتحديد مناطق واعدة، ثم التحقق باستخدام بيانات هيدروجيولوجية أو جيوفيزيائية.",
-    color: "#32aaff"
+    info: "يمكن دمج البيانات الجيولوجية والتضاريسية لتقييم مناطق محتملة، لكن هذه النسخة لا تحدد مواقع المياه أو أعماقها."
   },
 
   minerals: {
     name: "المعادن",
-    info: "يمكن تحليل البيانات الطيفية للبحث عن مؤشرات بعض المعادن والصخور المكشوفة. هذه المؤشرات لا تؤكد وجود خام اقتصادي أو معدن مدفون.",
-    color: "#ffcd4a"
+    info: "يمكن دراسة بعض خصائص الصخور المكشوفة بمؤشرات طيفية، لكن هذه النسخة تبحث عن المشاهد فقط ولا تحسب مؤشرات المعادن بعد."
   },
 
   thermal: {
     name: "الشذوذ الحراري",
-    info: "تسمح بيانات Landsat الحرارية بدراسة اختلافات حرارة سطح الأرض. تحتاج المقارنة إلى مراعاة التاريخ والطقس والغطاء الأرضي.",
-    color: "#ff673d"
+    info: "هذه النسخة لا تحسب الشذوذ الحراري. يتطلب ذلك جلب بيانات حرارية مناسبة ومعالجة قيمها ومراعاة تاريخ الالتقاط."
   },
 
   gravity: {
-    name: "شذوذ الجاذبية",
-    info: "تُستخدم بيانات الجاذبية لدراسة اختلافات الكثافة وتوزيع الكتل، لكن دقتها قد لا تسمح بتحديد الفراغات الصغيرة.",
-    color: "#bb87ff"
+    name: "الجاذبية",
+    info: "لا تتضمن هذه النسخة بيانات جاذبية أو تحليلًا لها. يلزم جلب مجموعة بيانات مناسبة قبل حساب أي شذوذ."
   }
 };
 
-function updateStatus(message) {
-  document.getElementById("status").innerHTML = message;
+function setStatus(message) {
+  $("status").textContent = message;
 }
 
-function validCoordinates(lat, lon, radius) {
-  return Number.isFinite(lat) &&
-    Number.isFinite(lon) &&
-    Number.isFinite(radius) &&
-    lat >= -90 && lat <= 90 &&
-    lon >= -180 && lon <= 180 &&
-    radius > 0 && radius <= 500;
+function validInputs() {
+  const lat = Number($("lat").value);
+  const lon = Number($("lon").value);
+  const radius = Number($("radius").value);
+
+  if (
+    !Number.isFinite(lat) ||
+    !Number.isFinite(lon) ||
+    !Number.isFinite(radius) ||
+    lat < -90 || lat > 90 ||
+    lon < -180 || lon > 180 ||
+    radius <= 0 || radius > 100
+  ) {
+    alert("أدخل إحداثيات صحيحة ونصف قطر بين 0.1 و100 كم.");
+    return null;
+  }
+
+  return {lat, lon, radius};
 }
 
-function setLocation(lat, lon, radius) {
-  if (!validCoordinates(lat, lon, radius)) {
+function makeBBox(lat, lon, radiusKm) {
+  const latDelta = radiusKm / 111.32;
+  const lonScale = Math.max(Math.abs(Math.cos(lat * Math.PI / 180)), 0.01);
+  const lonDelta = radiusKm / (111.32 * lonScale);
+
+  return [
+    Math.max(-180, lon - lonDelta),
+    Math.max(-90, lat - latDelta),
+    Math.min(180, lon + lonDelta),
+    Math.min(90, lat + latDelta)
+  ];
+}
+
+function updateLocation(lat, lon, radius) {
+  if (
+    !Number.isFinite(lat) || !Number.isFinite(lon) ||
+    !Number.isFinite(radius) ||
+    lat < -90 || lat > 90 ||
+    lon < -180 || lon > 180 ||
+    radius <= 0 || radius > 100
+  ) {
     alert("تحقق من الإحداثيات ونطاق البحث.");
     return;
   }
 
-  document.getElementById("lat").value = lat;
-  document.getElementById("lon").value = lon;
-  document.getElementById("radius").value = radius;
+  $("lat").value = lat.toFixed(6);
+  $("lon").value = lon.toFixed(6);
+  $("radius").value = radius;
 
   if (marker) map.removeLayer(marker);
   if (circle) map.removeLayer(circle);
 
   marker = L.marker([lat, lon]).addTo(map);
-
   marker.bindPopup(
     "مركز الدراسة<br>" +
     lat.toFixed(6) + ", " + lon.toFixed(6)
@@ -483,7 +543,7 @@ function setLocation(lat, lon, radius) {
     color: "#00d5ff",
     weight: 2,
     fillColor: "#00d5ff",
-    fillOpacity: 0.07
+    fillOpacity: 0.08
   }).addTo(map);
 
   map.fitBounds(circle.getBounds(), {
@@ -491,129 +551,327 @@ function setLocation(lat, lon, radius) {
     maxZoom: 14
   });
 
-  updateStatus(
-    "<b>مركز الدراسة:</b> " +
-    lat.toFixed(6) + ", " + lon.toFixed(6) +
-    "<br><b>نطاق البحث:</b> " + radius + " كم" +
-    "<br><b>نوع الدراسة:</b> " + targets[selectedTarget].name +
-    "<br><b>التحليل:</b> لم يتم تشغيل تحليل علمي للبيانات بعد."
-  );
+  $("mapStatus").textContent =
+    "المركز: " + lat.toFixed(6) + ", " + lon.toFixed(6) +
+    " | نصف القطر: " + radius + " كم";
 }
 
-document.getElementById("locate").addEventListener("click", () => {
-  const lat = Number(document.getElementById("lat").value);
-  const lon = Number(document.getElementById("lon").value);
-  const radius = Number(document.getElementById("radius").value);
-
-  setLocation(lat, lon, radius);
+$("locate").addEventListener("click", () => {
+  const v = validInputs();
+  if (v) updateLocation(v.lat, v.lon, v.radius);
 });
 
-document.getElementById("basemap").addEventListener("change", event => {
+$("basemap").addEventListener("change", event => {
   const next = layers[event.target.value];
-
   if (!next) return;
 
-  map.removeLayer(activeLayer);
-  activeLayer = next.addTo(map);
+  if (map.hasLayer(activeLayer)) map.removeLayer(activeLayer);
+
+  activeLayer = next;
+  activeLayer.addTo(map);
   activeLayer.bringToBack();
+});
+
+$("gps").addEventListener("click", () => {
+  if (!navigator.geolocation) {
+    alert("المتصفح لا يدعم تحديد الموقع.");
+    return;
+  }
+
+  setStatus("جارٍ تحديد موقعك...");
+
+  navigator.geolocation.getCurrentPosition(
+    pos => {
+      const radius = Number($("radius").value) || 5;
+      updateLocation(
+        pos.coords.latitude,
+        pos.coords.longitude,
+        radius
+      );
+      setStatus("تم تحديد الموقع بموافقتك.");
+    },
+    error => {
+      setStatus("تعذر تحديد الموقع. تحقق من إذن الموقع واتصال HTTPS.");
+      console.error(error);
+    },
+    {enableHighAccuracy: true, timeout: 15000}
+  );
+});
+
+$("drawMode").addEventListener("click", () => {
+  drawMode = !drawMode;
+  $("drawMode").textContent = drawMode
+    ? "انقر على الخريطة لاختيار المركز (مفعّل)"
+    : "✏️ تحديد المركز بالنقر على الخريطة";
+
+  setStatus(drawMode
+    ? "انقر على الخريطة لاختيار مركز منطقة الدراسة."
+    : "تم إيقاف وضع تحديد المركز.");
+});
+
+map.on("click", event => {
+  if (!drawMode) return;
+
+  const v = validInputs();
+  const radius = v ? v.radius : 5;
+
+  updateLocation(event.latlng.lat, event.latlng.lng, radius);
+  drawMode = false;
+  $("drawMode").textContent = "✏️ تحديد المركز بالنقر على الخريطة";
 });
 
 document.querySelectorAll("[data-target]").forEach(button => {
   button.addEventListener("click", () => {
     selectedTarget = button.dataset.target;
 
-    document.querySelectorAll("[data-target]").forEach(item => {
-      item.classList.toggle("active", item === button);
+    document.querySelectorAll("[data-target]").forEach(b => {
+      b.style.borderColor = b === button ? "#40e0a0" : "";
     });
 
-    const target = targets[selectedTarget];
-
-    document.getElementById("targetInfo").textContent =
-      target.name + ": " + target.info;
-
-    updateStatus(
-      "<b>الظاهرة المختارة:</b> " + target.name +
-      "<br><b>حالة البيانات:</b> لم يتم إجراء تحليل آلي." +
-      "<br>" + target.info
-    );
+    $("targetInfo").textContent =
+      targets[selectedTarget].name + ": " +
+      targets[selectedTarget].info;
   });
 });
 
-document.getElementById("gps").addEventListener("click", () => {
-  if (!navigator.geolocation) {
-    alert("متصفحك لا يدعم تحديد الموقع.");
-    return;
-  }
+function getThumbnail(feature) {
+  const assets = feature.assets || {};
 
-  navigator.geolocation.getCurrentPosition(
-    position => {
-      setLocation(
-        position.coords.latitude,
-        position.coords.longitude,
-        Number(document.getElementById("radius").value)
-      );
-    },
-    () => alert(
-      "تعذر تحديد موقعك. اسمح للمتصفح باستخدام الموقع، " +
-      "وتأكد من فتح الصفحة عبر اتصال آمن HTTPS."
-    ),
-    {
-      enableHighAccuracy: true,
-      timeout: 15000
+  for (const key of ["thumbnail", "rendered_preview", "preview"]) {
+    if (assets[key] && assets[key].href) {
+      return assets[key].href;
     }
-  );
-});
+  }
 
-map.on("click", event => {
-  document.getElementById("lat").value =
-    event.latlng.lat.toFixed(6);
+  return null;
+}
 
-  document.getElementById("lon").value =
-    event.latlng.lng.toFixed(6);
-});
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, ch => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[ch]);
+}
 
-document.getElementById("export").addEventListener("click", () => {
-  const lat = Number(document.getElementById("lat").value);
-  const lon = Number(document.getElementById("lon").value);
-  const radius = Number(document.getElementById("radius").value);
+function formatDate(value) {
+  if (!value) return "غير متاح";
+  return value.replace("T", " ").replace(/Z$/, " UTC");
+}
 
-  if (!validCoordinates(lat, lon, radius)) {
-    alert("أدخل إحداثيات صحيحة أولًا.");
+function featureCard(feature, index) {
+  const props = feature.properties || {};
+  const thumbnail = getThumbnail(feature);
+  const cloud = props["eo:cloud_cover"];
+  const date = props.datetime || props["start_datetime"] || "";
+  const id = feature.id || "بدون معرف";
+  const assets = feature.assets || {};
+
+  let assetLinks = "";
+
+  for (const key of ["visual", "red", "green", "blue", "nir", "swir16", "swir22"]) {
+    if (assets[key] && assets[key].href) {
+      assetLinks +=
+        '<a href="' + escapeHTML(assets[key].href) +
+        '" target="_blank" rel="noopener">فتح ' +
+        escapeHTML(key) + '</a> · ';
+    }
+  }
+
+  return `
+    <article class="result">
+      <h4>المشهد ${index + 1}</h4>
+      <div><b>المعرّف:</b> ${escapeHTML(id)}</div>
+      <div><b>المجموعة:</b> ${escapeHTML(feature.collection || "غير معروفة")}</div>
+      <div><b>تاريخ الالتقاط:</b> ${escapeHTML(formatDate(date))}</div>
+      <div><b>الغيوم:</b> ${
+        Number.isFinite(Number(cloud))
+          ? escapeHTML(Number(cloud).toFixed(1)) + "%"
+          : "غير متاح"
+      }</div>
+      ${
+        thumbnail
+          ? '<img loading="lazy" src="' + escapeHTML(thumbnail) +
+            '" alt="معاينة المشهد" onerror="this.style.display=\'none\'">'
+          : '<p class="muted">لا تتوفر معاينة مصغرة لهذا المشهد.</p>'
+      }
+      <p class="status">${assetLinks || "لا توجد روابط نطاقات معاينة شائعة لهذا المشهد."}</p>
+      <p class="note">هذه بيانات مشهد فضائي، وليست نتيجة كشف جيولوجي.</p>
+    </article>
+  `;
+}
+
+async function searchImages() {
+  const v = validInputs();
+  if (!v) return;
+
+  const dateFrom = $("dateFrom").value;
+  const dateTo = $("dateTo").value;
+  const maxCloud = Number($("cloud").value);
+  const limit = Number($("limit").value);
+
+  if (!dateFrom || !dateTo) {
+    alert("حدد تاريخ البداية والنهاية.");
     return;
   }
 
-  const csv =
-    "\uFEFFlatitude,longitude,radius_km,target\n" +
-    lat + "," + lon + "," + radius + "," + selectedTarget;
+  if (dateFrom > dateTo) {
+    alert("تاريخ البداية يجب أن يسبق تاريخ النهاية.");
+    return;
+  }
 
-  const blob = new Blob([csv], {
-    type: "text/csv;charset=utf-8"
-  });
+  if (!Number.isFinite(maxCloud) || maxCloud < 0 || maxCloud > 100) {
+    alert("نسبة الغيوم يجب أن تكون بين 0 و100.");
+    return;
+  }
 
+  const bbox = makeBBox(v.lat, v.lon, v.radius);
+
+  const body = {
+    collections: ["sentinel-2-l2a"],
+    bbox,
+    datetime: dateFrom + "T00:00:00Z/" + dateTo + "T23:59:59Z",
+    limit,
+    query: {
+      "eo:cloud_cover": {
+        lte: maxCloud
+      }
+    },
+    sortby: [
+      {field: "properties.datetime", direction: "desc"}
+    ]
+  };
+
+  const button = $("searchImages");
+  button.disabled = true;
+  $("results").textContent = "جارٍ البحث في كتالوج صور الأقمار الصناعية...";
+  setStatus("جارٍ إرسال طلب البحث إلى Earth Search STAC API.");
+  currentFeatures = [];
+
+  try {
+    const response = await fetch(STAC_URL, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify(body)
+    });
+
+    if (!response.ok) {
+      throw new Error("استجاب مصدر البيانات برمز HTTP " + response.status);
+    }
+
+    const data = await response.json();
+    currentFeatures = Array.isArray(data.features) ? data.features : [];
+
+    if (!currentFeatures.length) {
+      $("results").textContent =
+        "لم يتم العثور على مشاهد مطابقة. جرّب توسيع الفترة الزمنية، " +
+        "أو زيادة نسبة الغيوم، أو توسيع نطاق البحث.";
+      setStatus("اكتمل البحث، ولم تُعثر على نتائج مطابقة للمرشحات.");
+      return;
+    }
+
+    $("results").innerHTML =
+      '<p>عدد المشاهد المعادة: <b>' + currentFeatures.length +
+      '</b></p>' +
+      currentFeatures.map(featureCard).join("");
+
+    setStatus(
+      "اكتمل البحث بنجاح." +
+      " عدد المشاهد: " + currentFeatures.length +
+      ". المصدر: Earth Search STAC API." +
+      " النتائج تصف صورًا متاحة ولا تمثل تحليلًا لما تحت سطح الأرض."
+    );
+  } catch (error) {
+    console.error(error);
+
+    $("results").textContent =
+      "تعذر إكمال البحث. قد يكون مصدر البيانات غير متاح مؤقتًا، " +
+      "أو قد يمنع المتصفح الاتصال. تحقق من الإنترنت ثم أعد المحاولة.";
+
+    setStatus(
+      "فشل البحث: " + error.message +
+      ". لم يتم إنشاء نتائج بديلة أو وهمية."
+    );
+  } finally {
+    button.disabled = false;
+  }
+}
+
+$("searchImages").addEventListener("click", searchImages);
+
+$("clearResults").addEventListener("click", () => {
+  currentFeatures = [];
+  $("results").textContent = "تم مسح النتائج.";
+  setStatus("تم مسح نتائج البحث من الواجهة.");
+});
+
+function downloadFile(filename, content, type) {
+  const blob = new Blob(["\uFEFF", content], {type});
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
 
   link.href = url;
-  link.download = "geoscan-study.csv";
+  link.download = filename;
+  document.body.appendChild(link);
   link.click();
+  link.remove();
 
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
-});
+  setTimeout(() => URL.revokeObjectURL(url), 1500);
+}
 
-document.getElementById("sources").addEventListener("click", () => {
-  window.open(
-    "https://dataspace.copernicus.eu/",
-    "_blank",
-    "noopener"
+$("exportJSON").addEventListener("click", () => {
+  if (!currentFeatures.length) {
+    alert("ابحث عن صور أولًا.");
+    return;
+  }
+
+  downloadFile(
+    "geoscan-sentinel-results.json",
+    JSON.stringify(currentFeatures, null, 2),
+    "application/json;charset=utf-8"
   );
 });
 
-document.getElementById("reset").addEventListener("click", () => {
-  map.setView([31.9539, 35.9106], 8);
+$("exportCSV").addEventListener("click", () => {
+  if (!currentFeatures.length) {
+    alert("ابحث عن صور أولًا.");
+    return;
+  }
+
+  const quote = value =>
+    '"' + String(value ?? "").replace(/"/g, '""') + '"';
+
+  const rows = [
+    ["id", "collection", "datetime", "cloud_cover", "thumbnail"].join(",")
+  ];
+
+  for (const feature of currentFeatures) {
+    const props = feature.properties || {};
+
+    rows.push([
+      feature.id,
+      feature.collection,
+      props.datetime || props.start_datetime,
+      props["eo:cloud_cover"],
+      getThumbnail(feature) || ""
+    ].map(quote).join(","));
+  }
+
+  downloadFile(
+    "geoscan-sentinel-results.csv",
+    rows.join("\r\n"),
+    "text/csv;charset=utf-8"
+  );
 });
 
-document.getElementById("targetInfo").textContent =
-  targets.caves.name + ": " + targets.caves.info;
+$("targetInfo").textContent =
+  targets[selectedTarget].name + ": " + targets[selectedTarget].info;
+
+$("dateTo").value = new Date().toISOString().slice(0, 10);
+
+updateLocation(31.9539, 35.9106, 5);
 </script>
 
 </body>
